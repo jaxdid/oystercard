@@ -1,4 +1,6 @@
 class OysterCard
+  Limit = 90.00
+
   attr_reader :balance
 
   def initialize
@@ -6,6 +8,11 @@ class OysterCard
   end
 
   def top_up(money)
-    @balance += money
+    raise "Warning! Cannot add more than #{Limit}" if new_balance(money) > Limit
+    @balance = new_balance(money)
+  end
+
+  def new_balance(money)
+    @balance + money
   end
 end
