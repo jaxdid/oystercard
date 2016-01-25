@@ -22,4 +22,10 @@ describe OysterCard do
       expect(card.balance).to eq 0
     end
   end
+
+  describe '#deduct' do
+    it 'responds to #deduct with one argument' do
+      expect(card).to respond_to(:deduct).with(1).argument
+    end
+  end
 end
