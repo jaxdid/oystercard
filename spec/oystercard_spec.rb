@@ -3,9 +3,13 @@ require 'oystercard'
 describe OysterCard do
   subject(:card) { OysterCard.new }
   
-  describe '#add' do
-    it 'responds to #add with one argument' do
-      expect(card).to respond_to(:add).with(1).argument
+  describe '#top_up' do
+    it 'responds to #top_up with 1 argument' do
+      expect(card).to respond_to(:top_up).with(1).argument
+    end
+
+    it 'adds the argument value to existing balance' do
+      expect{card.top_up(10.00)}.to change{card.balance}.by(10.00)
     end
   end
 
