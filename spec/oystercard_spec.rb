@@ -3,6 +3,9 @@ require 'oystercard'
   describe OysterCard do 
 
 	subject(:card) { described_class.new }	
+  
+    it { is_expected.to respond_to(:top_up).with(1).argument }
+    it { is_expected.to respond_to(:deduct).with(1).argument }
 
 		it 'displays a balance of zero when card is new' do 
 		expect(card.balance).to eq 0
@@ -10,9 +13,8 @@ require 'oystercard'
 		end
 
 
-	describe '#top_up' do #when you describe a method it's lowercase and it's string.
+	describe '#top_up' do 
 
-    it { is_expected.to respond_to(:top_up).with(1).argument }
     
 		it 'allows user to top up' do
 		card.top_up(5)
@@ -32,6 +34,15 @@ require 'oystercard'
     end
 
 	end
+  
+  describe '#deduct' do
+    
+    it 'deducts a fare from the card' do
+      card.top_up 50
+      expect{ card.deduct 21}.to change{ card.balance }.by -21
+    end
+    
+  end
 	
   end
 
