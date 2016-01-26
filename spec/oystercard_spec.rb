@@ -36,13 +36,20 @@ require 'oystercard'
     
     it 'updates the in_journey? status to true' do
       card.top_up(2)
-      card.touch_in("")
-      expect(card).to be_in_journey 
+      #card.touch_in("")
+      allow(card).to receive(:in_journey?).and_return(true)
+      expect(card).to be_in_journey
     end
 
     it "raises an error if the current balance is less than £#{OysterCard::MIN_AMOUNT}" do
       expect{ card.touch_in("") }.to raise_error "Insufficient balance - Minimum required: £#{OysterCard::MIN_AMOUNT}"
-    end 
+    end
+
+    it 'stores the entry station' do
+      card.top_up(90)
+      card.touch_in("King's Cross")
+      expect(card.entry_station).to eq "King's Cross"
+    end
   end
   
   describe '#in-journey' do
@@ -58,8 +65,8 @@ require 'oystercard'
     
     before(:each) do
       card.top_up(5)
-      card.touch_in("")
-      card.touch_out("")
+      card.touch_in("King's Cross")
+      card.touch_out("Finsbury Park")
     end
     
     it 'updates the in_journey status to false' do
@@ -71,6 +78,10 @@ require 'oystercard'
     it 'deduces the minimum fare from the balance' do
      
      expect(card.balance).to eq(5 - OysterCard::MIN_FARE) 
+   end
+
+   it 'should reset @entry_station to nil' do
+    expect(card.entry_station).to eq nil
    end
    
   end
