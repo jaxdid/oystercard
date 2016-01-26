@@ -3,6 +3,18 @@ require 'oystercard'
   describe OysterCard do 
 
 	subject(:card) { described_class.new }	
+  
+  
+  it 'stores the history of journeys' do
+    card.top_up 40
+    card.touch_in "King's Cross"
+    card.touch_out "Acton Town"
+    expect(card.history).to eq [{"King's Cross"=> "Acton Town"}]
+  end
+  
+  it 'initial history is empty' do
+    expect(card.history).to eq []
+  end
 
   describe '#balance' do 
     
@@ -70,19 +82,18 @@ require 'oystercard'
     end
     
     it 'updates the in_journey status to false' do
-      
       expect(card).not_to be_in_journey
       
    end
    
     it 'deduces the minimum fare from the balance' do
-     
      expect(card.balance).to eq(5 - OysterCard::MIN_FARE) 
    end
 
    it 'should reset @entry_station to nil' do
     expect(card.entry_station).to eq nil
    end
+   
    
   end
   
