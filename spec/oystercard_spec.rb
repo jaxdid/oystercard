@@ -13,7 +13,6 @@ require 'oystercard'
 		end
    end
 
-
 	describe '#top_up' do 
 
   	it 'allows user to top up' do
@@ -27,10 +26,9 @@ require 'oystercard'
       
     end
     
-    it 'has a £90 limit on top ups' do
-      balance_limit = OysterCard::MAXIMUM_AMOUNT
-      card.top_up(balance_limit)
-      expect { card.top_up(1) }.to raise_error "You have reached £90"
+    it "has a £#{OysterCard::MAX_AMOUNT} limit on top ups" do
+      card.top_up(OysterCard::MAX_AMOUNT)
+      expect { card.top_up(1) }.to raise_error "You have reached £#{OysterCard::MAX_AMOUNT}"
     end
 	end
   
@@ -45,8 +43,13 @@ require 'oystercard'
   describe '#touch_in' do
     
     it 'updates the in_journey? status to true' do
+      card.top_up(2)
       card.touch_in("")
       expect(card).to be_in_journey 
+    end
+
+    it "raises an error if the current balance is less than £#{OysterCard::MIN_AMOUNT}" do
+      expect{ card.touch_in("") }.to raise_error "Insufficient balance - Minimum required: £#{OysterCard::MIN_AMOUNT}"
     end 
   end
   
@@ -61,6 +64,7 @@ require 'oystercard'
   describe '#touch_out' do
     
     it 'updates the in_journey status to false' do
+      card.top_up(2)
       card.touch_in("")
       card.touch_out("")
       expect(card).not_to be_in_journey

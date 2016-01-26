@@ -4,7 +4,8 @@ class OysterCard
 
  attr_reader :balance
 
- MAXIMUM_AMOUNT = 90
+ MAX_AMOUNT = 90
+ MIN_AMOUNT = 1
 
 	def initialize
 		@balance = 0
@@ -18,7 +19,7 @@ class OysterCard
 
 	def top_up(amount)
     fail "Does not accept negative amounts" if amount < 0
-    fail "You have reached £#{MAXIMUM_AMOUNT}" if updated_amount(amount) > MAXIMUM_AMOUNT
+    fail "You have reached £#{MAX_AMOUNT}" if updated_amount(amount) > MAX_AMOUNT
 		@balance += amount	
 	end
 	
@@ -27,6 +28,7 @@ class OysterCard
   end
   
   def touch_in(location)
+    fail "Insufficient balance - Minimum required: £#{MIN_AMOUNT}" if balance < MIN_AMOUNT
     self.in_journey = true
   end
   
