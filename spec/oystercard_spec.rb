@@ -3,20 +3,20 @@ require 'oystercard'
   describe OysterCard do 
 
 	subject(:card) { described_class.new }	
-  
-    it { is_expected.to respond_to(:top_up).with(1).argument }
-    it { is_expected.to respond_to(:deduct).with(1).argument }
 
+  describe '#balance' do 
+    
 		it 'displays a balance of zero when card is new' do 
-		expect(card.balance).to eq 0
+		
+    expect(card.balance).to eq 0
 
 		end
+   end
 
 
 	describe '#top_up' do 
 
-    
-		it 'allows user to top up' do
+  	it 'allows user to top up' do
 		card.top_up(5)
 		expect(card.balance).to eq 5 
 
@@ -32,7 +32,6 @@ require 'oystercard'
       card.top_up(balance_limit)
       expect { card.top_up(1) }.to raise_error "You have reached £90"
     end
-
 	end
   
   describe '#deduct' do
@@ -41,10 +40,35 @@ require 'oystercard'
       card.top_up 50
       expect{ card.deduct 21}.to change{ card.balance }.by -21
     end
+  end
+  
+  describe '#touch_in' do
     
+    it 'updates the in_journey? status to true' do
+      card.touch_in("")
+      expect(card).to be_in_journey 
+    end 
   end
-	
+  
+  describe '#in-journey' do
+    
+    it 'should have an initial status of false' do
+      
+      expect(card).not_to be_in_journey
+    end
   end
+  
+  describe '#touch_out' do
+    
+    it 'updates the in_journey status to false' do
+      card.touch_in("")
+      card.touch_out("")
+      expect(card).not_to be_in_journey
+   end
+  end
+  
+  
+end
 
 
 
