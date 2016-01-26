@@ -6,6 +6,7 @@ class OysterCard
 
  MAX_AMOUNT = 90
  MIN_AMOUNT = 1
+ MIN_FARE = 2
 
 	def initialize
 		@balance = 0
@@ -23,9 +24,6 @@ class OysterCard
 		@balance += amount	
 	end
 	
-  def deduct(amount)
-    @balance -= amount
-  end
   
   def touch_in(location)
     fail "Insufficient balance - Minimum required: £#{MIN_AMOUNT}" if balance < MIN_AMOUNT
@@ -33,15 +31,20 @@ class OysterCard
   end
   
   def touch_out(location)
+    deduct(MIN_FARE)
     self.in_journey = false
   end
     
   private
   
-  attr_writer :in_journey
+  attr_writer :in_journey, :balance
   
   def updated_amount(amount)
     @balance + amount
+  end
+  
+  def deduct(amount)
+    self.balance -= amount
   end
 
 

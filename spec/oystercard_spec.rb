@@ -32,14 +32,6 @@ require 'oystercard'
     end
 	end
   
-  describe '#deduct' do
-    
-    it 'deducts a fare from the card' do
-      card.top_up 50
-      expect{ card.deduct 21}.to change{ card.balance }.by -21
-    end
-  end
-  
   describe '#touch_in' do
     
     it 'updates the in_journey? status to true' do
@@ -60,15 +52,27 @@ require 'oystercard'
       expect(card).not_to be_in_journey
     end
   end
+
   
   describe '#touch_out' do
     
-    it 'updates the in_journey status to false' do
-      card.top_up(2)
+    before(:each) do
+      card.top_up(5)
       card.touch_in("")
       card.touch_out("")
+    end
+    
+    it 'updates the in_journey status to false' do
+      
       expect(card).not_to be_in_journey
+      
    end
+   
+    it 'deduces the minimum fare from the balance' do
+     
+     expect(card.balance).to eq(5 - OysterCard::MIN_FARE) 
+   end
+   
   end
   
   
