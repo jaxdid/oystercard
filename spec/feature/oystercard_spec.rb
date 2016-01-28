@@ -14,4 +14,17 @@ describe 'User stories' do
     station = Station.new("Finsbury Park", 2)
     expect(station.zone).to eq 2
   end
+
+# In order to be charged correctly
+# As a customer
+# I need a penalty charge deducted if I fail to touch in or out
+
+  it 'deducts a penalty charge if user fails to touch in or out' do
+    oystercard = OysterCard.new
+    oystercard.top_up(30)
+    oystercard.touch_in("Finsbury Park")
+    #oystercard.touch_in("")
+    expect{oystercard.touch_in("")}.to change {oystercard.balance}.by -OysterCard::PENALTY_CHARGE
+  end
+
 end

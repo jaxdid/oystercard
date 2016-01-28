@@ -66,16 +66,13 @@ require 'oystercard'
   end
   
   describe '#in-journey' do
-    
     it 'should have an initial status of false' do
-      
       expect(card).not_to be_in_journey
     end
   end
 
   
   describe '#touch_out' do
-    
     before(:each) do
       card.top_up(5)
       card.touch_in("King's Cross")
@@ -84,7 +81,6 @@ require 'oystercard'
     
     it 'updates the in_journey status to false' do
       expect(card).not_to be_in_journey
-      
    end
    
     it 'deducts the minimum fare from the balance' do
