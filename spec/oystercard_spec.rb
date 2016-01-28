@@ -9,7 +9,9 @@ require 'oystercard'
     card.top_up 40
     card.touch_in "King's Cross"
     card.touch_out "Acton Town"
-    expect(card.history).to eq [{"King's Cross"=> "Acton Town"}]
+    card.touch_in "Finsbury Park"
+    card.touch_out "Acton Town"
+    expect(card.history).to eq [{"King's Cross" => "Acton Town"}, {"Finsbury Park" => "Acton Town"}]
   end
   
   it 'initial history is empty' do
@@ -48,8 +50,7 @@ require 'oystercard'
     
     it 'updates the in_journey? status to true' do
       card.top_up(2)
-      #card.touch_in("")
-      allow(card).to receive(:in_journey?).and_return(true)
+      card.touch_in("")
       expect(card).to be_in_journey
     end
 
@@ -86,7 +87,7 @@ require 'oystercard'
       
    end
    
-    it 'deduces the minimum fare from the balance' do
+    it 'deducts the minimum fare from the balance' do
      expect(card.balance).to eq(5 - OysterCard::MIN_FARE) 
    end
 
